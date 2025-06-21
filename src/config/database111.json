@@ -1,0 +1,17 @@
+
+  {
+    "development": {
+      "username": "root",
+      "password": "",
+      "database": "systemaz",
+      "host": "localhost",
+      "dialect": "mysql",
+      "globalOptions": {
+        "define": {
+          "timestamps": true,
+          "underscored": true
+        }
+      }
+    }
+  }
+  
