@@ -5,7 +5,7 @@ module.exports = {
     dialect: process.env.DB_DIALECT_DEV || 'mysql', // Mantenha apenas uma vez
     username: process.env.DB_USERNAME_DEV || 'root', // Com fallback
     password: process.env.DB_PASSWORD_DEV || null,
-    database: process.env.DB_DATABASE_DEV || 'systemaz', // Exemplo de fallback para o nome do DB
+    database: process.env.DB_DATABASE_DEV || 'CSAT', // Exemplo de fallback para o nome do DB
     host: process.env.DB_HOST_DEV || '127.0.0.1',
     port: process.env.DB_PORT,
     
