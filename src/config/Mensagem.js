@@ -1,5 +1,8 @@
-require('dotenv').config();
-function lembretePesquisa(nome, caso){
+import dotenv from 'dotenv'
+dotenv.config()
+
+
+function generateSurveyReminder(nome, caso) {
 
     return `<!DOCTYPE html>
 <html lang="pt-bt">
@@ -34,4 +37,4 @@ function lembretePesquisa(nome, caso){
 
 
 
-export default lembretePesquisa;
+export default generateSurveyReminder;

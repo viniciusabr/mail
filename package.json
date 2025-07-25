@@ -1,13 +1,14 @@
 {
   "name": "sistemaz",
   "version": "1.0.0",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "@azure/identity": "^4.8.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "axios": "^1.7.9",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
@@ -15,6 +16,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.14.1",
     "nodemailer": "^6.10.0",
+    "replace-in-file": "^8.3.0",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
@@ -23,6 +25,7 @@
     "sucrase": "^3.35.0"
   },
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "fix-esm": "node scripts/fix.to-esm.js"
   }
 }

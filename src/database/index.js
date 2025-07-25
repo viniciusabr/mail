@@ -1,27 +1,31 @@
-import { Sequelize } from 'sequelize'; // Importação da class sequelize
-import Customer from '../app/models/Customer'; //importação do modelo customer
-import dbConfig from '../config/database'; // Importação das configurações do banco de dados
+import { Sequelize } from 'sequelize'; // Importação da classe Sequelize
+import Customer from '../app/models/Customer.js'; // Importação do model Customer
+import User from '../app/models/User.js'; // Importação do model User
+import dbConfig from '../config/database.js'; // Configurações do banco de dados
 
+// Pegando as informações do ambiente atual (development, production etc.)
+const currentEnvironmentConfig = dbConfig.development;
 
-const currentEnvironmentConfig = dbConfig.development; // Pegando as informações do development diretamente
+// Instancia o Sequelize com as configurações do banco
+const sequelize = new Sequelize(currentEnvironmentConfig);
 
-const sequelize = new Sequelize(currentEnvironmentConfig); // Instanciação da class sequalize passando como parâmetro do dados do banco de dados
-Customer.init(sequelize) // chando o metodo init e passando como parametros a classe instacializada
+// Inicializa os models passando a instância do Sequelize
+Customer.init(sequelize);
+User.initModel(sequelize); // ⚠️ Corrigido: o método correto do seu model User é initModel()
 
-// Opcional: Teste a conexão com o banco de dados
+// Função opcional para testar conexão com o banco
 async function testDatabaseConnection() {
   try {
     await sequelize.authenticate();
-    console.error('Conexão com o banco de dados estabelecida com sucesso.');
+    console.log('Conexão com o banco de dados estabelecida com sucesso.');
   } catch (error) {
-    console.log('Não foi possível conectar ao banco de dados:', error);
-    // Você pode querer sair da aplicação ou lidar com o erro de outra forma aqui
-    process.exit(1); // Exemplo: Sair se não conseguir conectar
+    console.error('Não foi possível conectar ao banco de dados:', error);
+    process.exit(1); // Encerra a aplicação caso não consiga conectar
   }
 }
 
-// Chame a função para testar a conexão quando o arquivo for carregado
+// Executa o teste de conexão ao carregar
 testDatabaseConnection();
 
-// IMPORTANTE: Exporte a instância *inicializada* do Sequelize
-module.exports = sequelize;
+// Exporta a instância do Sequelize para uso em outros arquivos
+export default sequelize;

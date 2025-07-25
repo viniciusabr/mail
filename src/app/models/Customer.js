@@ -28,7 +28,7 @@ class Customer extends Model {
           type: DataTypes.STRING,
         },
         data: {
-          type: DataTypes.STRING,
+          type: DataTypes.DATE,
         }
       },
       {

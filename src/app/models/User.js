@@ -1,25 +1,24 @@
-require('dotenv').config();
-import Sequelize, { Model } from "sequelize";
-import sequelize from "../../config/database.js";
+import dotenv from 'dotenv'
+import { Model, DataTypes } from "sequelize"
+dotenv.config()
 
 class User extends Model {
-  static init() {
+  static initModel(sequelize) {
     super.init(
       {
-        name: Sequelize.STRING,
-        email: Sequelize.STRING,
-        password_hash: Sequelize.STRING,
-        provider: Sequelize.BOOLEAN,
+        name: DataTypes.STRING,
+        email: DataTypes.STRING,
+        password_hash: DataTypes.STRING,
       },
       {
         sequelize,
-        timestamps: false,
+        tableName: 'users', // opcional, mas bom deixar explícito
+        modelName: 'User',  // usado internamente pelo Sequelize
+        timestamps: true,   // cria createdAt e updatedAt
+        underscored: true,  // cria campos snake_case: created_at, etc.
       }
-    );
+    )
   }
 }
 
-// Remova essa linha, pois ela não é necessária
-// User.init();
-
-export default User;
+export default User

@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
+export default {
    up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('customers', { 
       
