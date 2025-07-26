@@ -1,4 +1,4 @@
-import generateSurveyReminder from "../../config/Mensagem.js";
+import generateSurveyReminder from "../utils/generateSurveyReminder.js";
 import Customer from "../models/Customer.js"
 import { sendSurveyReminderEmail } from '../utils/send.email.js'
 import validator from 'validator'
