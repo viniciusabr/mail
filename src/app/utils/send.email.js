@@ -74,7 +74,7 @@ export const sendSurveyReminderEmail = async (recipientEmail, htmlContent) => {
     const mailOptions = {
       from: `Pesquisa de Satisfação Microvix <${USER_EMAIL}>`,
       to: recipientEmail,
-      subject: '🗓️ Lembrete: Pesquisa de Satisfação Microvix',
+      subject: '🗓️ Lembrete: Pesquisa de Satisfação - Microvix',
       html: htmlContent,
     };
 

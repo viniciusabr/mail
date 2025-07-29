@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    
     <title>Lembrete de Pesquisa de Satisfação</title>
     <style>
         body {
@@ -26,45 +29,50 @@
 
         p {
             margin-bottom: 15px;
-        }
-
-        strong {
-            color: #000000;
+            font-size: large;
+            text-align: justify;
         }
 
         .gif-img {
             display: block;
-            margin: 15px auto;
-            max-width: 100px;
-            /* Ajuste conforme necessário */
-            height: auto;
-        }
-
-        .signature-img {
-            display: block;
-            margin-top: 20px;
-            max-width: 300px;
-            /* Ajuste conforme necessário */
-            height: auto;
+            justify-content: center;
+            margin: 0 10px;
+            width: 550px;
+            height: 200px;
         }
 
         .header {
-
             background-color: #5b2e90;
             text-align: center;
-            padding: 20px;
-
+            
+        }
+        .conteiner-lembrete{
+            height: 100px;
+            background-color: #0000004c;
         }
 
         .lembrete {
+   
+            align-items: center;
+            align-items: center;
             color: #ffb200;
+            font-size: 30px;
+            margin-bottom: 0;
+      
         }
 
         .img-logo {
             display: block;
             margin: 0 auto;
-            max-width: 100px;
+            max-width: 200px;
             height: auto;
+            padding: 10px;
+    
+        }
+
+        .img-nps {
+            max-width: 100px;
+            height: 60px;
         }
     </style>
 </head>
@@ -72,19 +80,27 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://res.cloudinary.com/dwsqmdbgr/image/upload/v1753563905/logo-linx_u8a9nz.png"
-                class="img-logo">
-            <h2 class="lembrete">🗓️Lembrete: Pesquisa de Satisfação</h2>
+             <img src="https://res.cloudinary.com/dwsqmdbgr/image/upload/v1753563905/logo-linx_u8a9nz.png"
+                    class="img-logo">
+            <div class="conteiner-lembrete">
+                <h2 class="lembrete">⏰ Lembrete: Pesquisa de Satisfação </h2>
+                <img src="https://res.cloudinary.com/dwsqmdbgr/image/upload/v1753635390/Animated_OdometerGIF_tgxbdr.gif" class="img-nps">
+
+            </div>
+
+
         </div>
-        <p>Prezado(a) <strong>{{nome}},</strong></p>
-        <p>Espero que esteja bem! 😊</p>
+        <p style="font-size: 20px; ">Olá, <strong>{{nome}}</strong>, tudo bem ?</p>
+        
         <p>Notei que ainda não recebemos sua avaliação sobre o suporte que realizei na sua loja.</p>
-        <p>Opinião é fundamental para o meu desenvolvimento profissional e para garantir que estou atendendo às suas
-            expectativas.<br />A avaliação é enviada por e-mail com o título <strong>"Pesquisa de Satisfação Linx
-                Chamado Nº{{caso}}"</strong>.</p>
-        <p>Sua resposta é muito importante para nós. Agradecemos antecipadamente pelo seu tempo e feedback. 🙏</p>
-        <p>caso não tenha chego, pode clicar no botão para acessa-lá</p>
-        <p><br />Atenciosamente,</p>
+        <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXM5NXltNXJsN2s2YXRpbWlhZXl6NWFqc3d1dDhmcDkyOW9oY3JxeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CT5Ye7uVJLFtu/giphy.gif"
+            class="gif-img" alt="Gif do gato com botas implorando">
+        <p>Sua opinião é fundamental para o meu desenvolvimento profissional e para garantir que estou atendendo às suas expectativas.</p>
+        <p>A avaliação é enviada por e-mail com o título <strong>"Pesquisa de Satisfação Linx Chamado Nº{{caso}}"</strong></p>
+        <p>Sua resposta é muito importante para nós. Agradecemos antecipadamente pelo seu tempo e feedback!</p>
+        <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWlkbjFtand5aW8wdHdrajZ2Y2M5d2JoeHM1b3pka3lxdnl1dTBxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif"
+            class="gif-img">
+        <p>Abraços,</p>
     </div>
 </body>
 
