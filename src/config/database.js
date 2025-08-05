@@ -12,7 +12,6 @@ export default {
 
   },
   production: {
-    // Use variáveis de ambiente específicas para PROD aqui!
     dialect: process.env.DB_DIALECT_PROD,
     username: process.env.DB_USERNAME_PROD,
     password: process.env.DB_PASSWORD_PROD,
