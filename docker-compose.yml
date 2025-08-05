@@ -1,0 +1,142 @@
+# version: '3.8'  
+# # Define a versão da sintaxe do Docker Compose que será usada.
+# # Versão 3.8 é estável e compatível com praticamente todas as versões do Docker.
+# # Não tem relação com a versão do Docker, e sim com o formato deste arquivo.
+
+# services:  
+# # Início da definição dos serviços (containers).
+# # Cada serviço aqui vira um container separado.
+
+#   mysql:  
+#   # Nome do serviço = "mysql"
+#   # Isso será usado como hostname dentro da rede Docker. Ex: DB_HOST=mysql
+
+#     image: mysql:8  
+#     # Usa a imagem oficial do MySQL, versão 8, do Docker Hub.
+#     # Docker vai baixar essa imagem se não estiver em cache local.
+
+#     ports:
+#       - "3306:3306"
+#       # Mapeia a porta 3306 do host (sua máquina) para a porta 3306 do container.
+#       # Isso permite que você acesse o MySQL do seu sistema (ex: via DBeaver ou MySQL Workbench).
+#       # Formato: "<porta_host>:<porta_container>"
+
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=minhasenha
+#       # Define a senha do usuário root do MySQL dentro do container.
+#       # O MySQL precisa dessa senha na primeira vez que é iniciado.
+
+#       - MYSQL_DATABASE=CSAT
+#       # Cria automaticamente o banco de dados chamado CSAT ao iniciar.
+
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+#       # Define um volume persistente.
+#       # mysql_data → nome lógico do volume (declarado depois)
+#       # /var/lib/mysql → caminho onde o MySQL salva os dados dentro do container.
+#       # Isso garante que os dados não se percam ao parar/remover o container.
+
+#   redis:
+#   # Serviço chamado "redis"
+#   # Também vira hostname interno. Ex: REDIS_HOST=redis
+
+#     image: redis:7
+#     # Usa imagem oficial do Redis, versão 7, direto do Docker Hub.
+
+#     ports:
+#       - "6379:6379"
+#       # Mapeia a porta padrão do Redis.
+#       # Permite que você conecte no Redis de fora do container, se quiser.
+
+#   app:
+#   # Serviço principal — seu app Node.js.
+#   # Esse container roda seu código fonte usando a imagem pronta do Node.
+
+#     image: node:18
+#     # Usa imagem oficial do Node.js, versão 18.
+#     # Já vem com o Node e o npm instalados, pronto para rodar JavaScript.
+
+#     working_dir: /app
+#     # Define o diretório "de trabalho" dentro do container.
+#     # Todos os comandos (ex: npm install) vão rodar dentro desse diretório.
+
+#     volumes:
+#       - ./:/app
+#       # Mapeia sua pasta local "./app" para dentro do container, na pasta "/app".
+#       # Tudo que está localmente em ./app estará visível no container em /app.
+#       # Qualquer alteração que você faça no código local afeta o container.
+#       # É um "espelho" entre sua máquina e o container.
+
+#     ports:
+#       - "3000:3000"
+#       # Expõe a porta 3000 do app para sua máquina.
+#       # Permite acessar via navegador: http://localhost:3000
+#       # Exemplo: se seu app escuta na porta 3000, isso torna ele acessível.
+
+#     command: sh -c "npm install && node src/server.js"
+#     # Comando que será executado assim que o container iniciar.
+#     # sh -c → executa comandos encadeados no shell.
+#     # Primeiro: npm install → instala dependências listadas no package.json.
+#     # Depois: node index.js → inicia o servidor Node.js.
+#     # Importante: precisa que index.js e package.json estejam na pasta ./app
+
+#     env_file:
+#       - .env
+#       # Carrega variáveis de ambiente do arquivo .env da sua máquina.
+#       # Essas variáveis são visíveis dentro do container.
+#       # Exemplo: process.env.DB_HOST_DEV, etc.
+
+#     depends_on:
+#       - mysql
+#       - redis
+#       # Define ordem de inicialização: mysql e redis sobem antes do app.
+#       # Importante: isso garante ordem, mas não espera os serviços estarem "prontos".
+#       # Se o app tentar conectar no banco antes do MySQL estar pronto, pode falhar.
+#       # Solução: usar retry ou espera no código Node, se necessário.
+
+# volumes:
+#   mysql_data:
+#   # Declara o volume mysql_data.
+#   # O Docker vai gerenciar o armazenamento persistente (em disco) fora do container.
+#   # Evita perda de dados do MySQL entre reinicializações.
+
+
+
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=minhasenha
+      - MYSQL_DATABASE=CSAT
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  app:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    # command: sh -c "npm install && sleep 10 && node src/server.js"
+
+    command: sh -c "npm install && sleep 10 && node --inspect=0.0.0.0:9229 src/server.js"
+
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+volumes:
+  mysql_data:

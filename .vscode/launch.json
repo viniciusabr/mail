@@ -1,13 +1,32 @@
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "type": "node",
+//       "request": "attach",
+//       "name": "Debug Node Local",
+//       "address": "localhost",
+//       "port": 9229,
+//       "protocol": "inspector",
+//       "skipFiles": ["<node_internals>/**"]
+//     }
+//   ]
+// }
+
 {
   "version": "0.2.0",
   "configurations": [
     {
       "type": "node",
-      "request": "launch",
-      "name": "Iniciar servidor com debug",
-      "program": "${workspaceFolder}/src/server.js",
-      "runtimeExecutable": "node",
-      "skipFiles": ["<node_internals>/**"]
+      "request": "attach",
+      "name": "Debug Node in Docker",
+      "address": "localhost",
+      "port": 9229,
+      "protocol": "inspector",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"],
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app"
     }
   ]
 }
