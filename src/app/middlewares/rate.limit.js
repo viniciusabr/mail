@@ -2,7 +2,7 @@ import rateLimit from 'express-rate-limit';
 
 export const limiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000, // 24h
-  max: 40,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   handler: (_req, res) => {
