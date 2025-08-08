@@ -65,16 +65,19 @@ export const register = async (req, res, next) => {
 
     logger.info(`📥 [REGISTER CONTROLLER] Tentativa de registro: ${email}`);
 
-    const user = await registerService({ name, email, password });
+    const { user, token } = await registerService({ name, email, password });
 
-    const { password: _pw, ...userSafe } = user;
+    const userSafe = user.get({ plain: true });
+    delete userSafe.password_hash;
 
     logger.info(`✅ [REGISTER CONTROLLER] Registro concluído: ${email}`);
 
     res.status(201).json({
       message: "Usuário registrado com sucesso",
-      user: userSafe._doc
+      user: userSafe,
+      token
     });
+
   } catch (err) {
     logger.error(`❌ [REGISTER CONTROLLER] Erro ao registrar ${req.body?.email} | ${err.message}`);
     next(err);
