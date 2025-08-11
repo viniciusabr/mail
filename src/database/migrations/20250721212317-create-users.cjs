@@ -29,6 +29,16 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false
+      },
+      user_adm: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
+      },
+      status: {
+        type: Sequelize.ENUM('ativo','inativo'),
+        defaultValue: 'inativo',
+        allowNull: false
       }
     });
   },
