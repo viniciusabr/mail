@@ -85,10 +85,25 @@ export const register = async ({ name, email, password }) => {
 
   logger.info(`✅ [REGISTER SERVICE] Usuário criado: ${email} (ID: ${user.id})`);
 
-  return user;
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '1d'
+    }
+  );
+
+  logger.info(`✅ [REGISTER SERVICE] Token gerado para ${email}`);
+
+  return { user, token };
 };
 
 export const login = async ({ email, password }) => {
+  logger.info(`📥 [LOGIN SERVICE] Tentativa de login: ${email}`);
+
   logger.info(`📥 [LOGIN SERVICE] Tentativa de login: ${email}`);
 
   const user = await User.findOne({ 
@@ -97,6 +112,7 @@ export const login = async ({ email, password }) => {
 
   if (!user) {
     logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado ou inativo: ${email}`);
+    logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado: ${email}`);
     const error = new Error('Usuário não encontrado ou inativo');
     error.statusCode = 400;
     throw error;
