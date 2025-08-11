@@ -48,21 +48,17 @@ import { loginSchema, registerSchema } from "../validations/auth.validation.js";
 export const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-
     if (!email.endsWith('@linx.com.br')) {
       logger.warn(`⚠️ [REGISTER CONTROLLER] E-mail inválido para registro: ${email}`);
       return res.status(400).json({ message: 'Cadastro permitido apenas com e-mails @linx.com.br' });
     }
 
     const { error } = registerSchema.validate(req.body)
-
-
     if (error) {
       logger.error(`❌ [REGISTER CONTROLLER] Erro de validação: ${error.details[0].message}`);
       return res.status(400).json({ message: error.details[0].message });
     }
-
-
+    
     logger.info(`📥 [REGISTER CONTROLLER] Tentativa de registro: ${email}`);
 
     const user = await registerService({ name, email, password });

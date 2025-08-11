@@ -91,11 +91,13 @@ export const register = async ({ name, email, password }) => {
 export const login = async ({ email, password }) => {
   logger.info(`📥 [LOGIN SERVICE] Tentativa de login: ${email}`);
 
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({ 
+    where: { email, status: 'ativo' }
+  });
 
   if (!user) {
-    logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado: ${email}`);
-    const error = new Error('Usuário não encontrado');
+    logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado ou inativo: ${email}`);
+    const error = new Error('Usuário não encontrado ou inativo');
     error.statusCode = 400;
     throw error;
   }
