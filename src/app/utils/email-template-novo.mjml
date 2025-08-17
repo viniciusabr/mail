@@ -1,0 +1,72 @@
+<mjml>
+  <mj-body background-color="#f4f4f4" font-family="Arial, sans-serif">
+    <mj-section padding="20px 0">
+      <mj-column>
+        <mj-wrapper background-color="#ffffff" border-radius="8px" padding="0px">
+          <mj-section background-color="#5b2e90" padding="10px 0">
+            <mj-column>
+              <mj-image
+                src="https://res.cloudinary.com/dwsqmdbgr/image/upload/v1753563905/logo-linx_u8a9nz.png"
+                width="200px"
+                align="center"
+                padding="10px 0">
+              </mj-image>
+              <mj-text color="#ffb200" font-size="24px" align="center" font-weight="bold" padding="10px 0 0 0">
+                ⏰ Lembrete: Pesquisa de Satisfação
+              </mj-text>
+              <mj-image
+                src="https://res.cloudinary.com/dwsqmdbgr/image/upload/v1753635390/Animated_OdometerGIF_tgxbdr.gif"
+                width="100px"
+                height="60px"
+                align="center"
+                padding="5px 0 15px 0">
+              </mj-image>
+            </mj-column>
+          </mj-section>
+
+          <mj-section>
+            <mj-column>
+              <mj-text font-size="20px" padding="20px">
+                Olá, <strong>{{nome}}</strong>, tudo bem?
+              </mj-text>
+
+              <mj-text font-size="16px" padding="0 20px 10px 20px" line-height="1.6">
+                Notei que ainda não recebemos sua avaliação sobre o suporte que realizei na sua loja.
+              </mj-text>
+
+              <mj-image
+                padding="0 20px 20px 20px"
+                src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXM5NXltNXJsN2s2YXRpbWlhZXl6NWFqc3d1dDhmcDkyOW9oY3JxeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CT5Ye7uVJLFtu/giphy.gif"
+                alt="Gif do gato com botas implorando"
+                width="100%">
+              </mj-image>
+
+              <mj-text font-size="16px" padding="0 20px" line-height="1.6">
+                Sua opinião é fundamental para o meu desenvolvimento profissional e para garantir que estou atendendo às suas expectativas.
+              </mj-text>
+
+              <mj-text font-size="16px" padding="10px 20px 0 20px" line-height="1.6">
+                A avaliação é enviada por e-mail com o título <strong>"Pesquisa de Satisfação Linx Chamado Nº{{caso}}"</strong>
+              </mj-text>
+
+              <mj-text font-size="16px" padding="10px 20px" line-height="1.6">
+                Sua resposta é muito importante para nós. Agradecemos antecipadamente pelo seu tempo e feedback!
+              </mj-text>
+
+              <mj-image
+                padding="0 20px 20px 20px"
+                src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWlkbjFtand5aW8wdHdrajZ2Y2M5d2JoeHM1b3pka3lxdnl1dTBxdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif"
+                alt="Gif fofo"
+                width="100%">
+              </mj-image>
+
+              <mj-text font-size="16px" padding="0 20px 20px 20px" line-height="1.6">
+                Abraços,
+              </mj-text>
+            </mj-column>
+          </mj-section>
+        </mj-wrapper>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

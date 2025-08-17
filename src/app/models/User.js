@@ -9,6 +9,8 @@ class User extends Model {
         name: DataTypes.STRING,
         email: DataTypes.STRING,
         password_hash: DataTypes.STRING,
+        user_adm: DataTypes.BOOLEAN,
+        status: DataTypes.ENUM('ativo','inativo')
       },
       {
         sequelize,
