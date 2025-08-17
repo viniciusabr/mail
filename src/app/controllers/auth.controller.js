@@ -47,16 +47,38 @@ import { loginSchema, registerSchema } from "../validations/auth.validation.js";
 
 export const register = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body
+    const { name, email, password } = req.body;
 
-    const user = await registerService({ name, email, password })
+    if (!email.endsWith('@linx.com.br')) {
+      logger.warn(`⚠️ [REGISTER CONTROLLER] E-mail inválido para registro: ${email}`);
+      return res.status(400).json({ message: 'Cadastro permitido apenas com e-mails @linx.com.br' });
+    }
 
-    const { password: _pw, ...userSafe } = user
+
+    const { error } = registerSchema.validate(req.body)
+
+
+    if (error) {
+      logger.error(`❌ [REGISTER CONTROLLER] Erro de validação: ${error.details[0].message}`);
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+
+    logger.info(`📥 [REGISTER CONTROLLER] Tentativa de registro: ${email}`);
+
+    const { user, token } = await registerService({ name, email, password });
+
+    const userSafe = user.get({ plain: true });
+    delete userSafe.password_hash;
+
+    logger.info(`✅ [REGISTER CONTROLLER] Registro concluído: ${email}`);
 
     res.status(201).json({
       message: "Usuário registrado com sucesso",
-      user: userSafe._doc
-    })
+      user: userSafe,
+      token
+    });
+
   } catch (err) {
     logger.error(`❌ [REGISTER CONTROLLER] Erro ao registrar ${req.body?.email} | ${err.message}`);
     next(err);
