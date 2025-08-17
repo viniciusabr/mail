@@ -66,7 +66,7 @@ export const register = async (req, res, next) => {
 
     logger.info(`📥 [REGISTER CONTROLLER] Tentativa de registro: ${email}`);
 
-    const { user, token } = await registerService({ name, email, password });
+    const { user } = await registerService({ name, email, password });
 
     const userSafe = user.get({ plain: true });
     delete userSafe.password_hash;
@@ -76,7 +76,6 @@ export const register = async (req, res, next) => {
     res.status(201).json({
       message: "Usuário registrado com sucesso",
       user: userSafe,
-      token
     });
 
   } catch (err) {
