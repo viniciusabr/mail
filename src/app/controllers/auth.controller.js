@@ -54,6 +54,7 @@ export const register = async (req, res, next) => {
       return res.status(400).json({ message: 'Cadastro permitido apenas com e-mails @linx.com.br' });
     }
 
+
     const { error } = registerSchema.validate(req.body)
 
 
