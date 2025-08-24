@@ -10,6 +10,7 @@ import { createBullBoard } from 'bull-board';
 import { BullAdapter } from 'bull-board/bullAdapter.js';
 import emailQueue from './queues/email.queue.js';
 import helmet from 'helmet';
+import adminRoutes from './app/routes/admin.routes.js'
 
 const { router } = createBullBoard([
   new BullAdapter(emailQueue)
@@ -25,7 +26,7 @@ app.use(express.json())
 app.use(helmet());
 
 app.use(cors({
-  origin: ['http://127.0.0.1:5174'],
+  origin: ['http://127.0.0.1:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -36,6 +37,8 @@ app.use('/admin/queues', router);
 app.use('/api', customerRoutes)
 
 app.use('/api/auth', authRoutes)
+
+app.use('/api/admin', adminRoutes)
 
 
 // app.use('/api/auth', emailAuthRoutes)

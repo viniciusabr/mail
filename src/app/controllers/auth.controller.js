@@ -1,43 +1,3 @@
-// import {
-//   register as registerService,
-//   login as loginService
-// } from "../services/auth.service.js"
-
-// export const register = async (req, res, next) => {
-//   try {
-//     const { name, email, password } = req.body
-
-//     const user = await registerService({ name, email, password })
-
-//     const { password: _pw, ...userSafe } = user
-
-//     res.status(201).json({
-//       message: "Usuário registrado com sucesso",
-//       user: userSafe._doc
-//     })
-//   } catch (err) {
-//     next(err)
-//   }
-// }
-
-
-// export const login = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body
-
-//     // Autentica e gera token
-//     const token = await loginService({ email, password })
-
-//     res.status(200).json({
-//       message: "Login bem-sucedido",
-//       token
-//     })
-//   } catch (err) {
-//     next(err)
-//   }
-// }
-
-
 import {
   register as registerService,
   login as loginService
@@ -47,16 +7,37 @@ import { loginSchema, registerSchema } from "../validations/auth.validation.js";
 
 export const register = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body
+    const { name, email, password } = req.body;
 
-    const user = await registerService({ name, email, password })
+    if (!email.endsWith('@linx.com.br')) {
+      logger.warn(`⚠️ [REGISTER CONTROLLER] E-mail inválido para registro: ${email}`);
+      return res.status(400).json({ message: 'Cadastro permitido apenas com e-mails @linx.com.br' });
+    }
 
-    const { password: _pw, ...userSafe } = user
+
+    const { error } = registerSchema.validate(req.body)
+
+
+    if (error) {
+      logger.error(`❌ [REGISTER CONTROLLER] Erro de validação: ${error.details[0].message}`);
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+
+    logger.info(`📥 [REGISTER CONTROLLER] Tentativa de registro: ${email}`);
+
+    const { user } = await registerService({ name, email, password });
+
+    const userSafe = user.get({ plain: true });
+    delete userSafe.password_hash;
+
+    logger.info(`✅ [REGISTER CONTROLLER] Registro concluído: ${email}`);
 
     res.status(201).json({
       message: "Usuário registrado com sucesso",
-      user: userSafe._doc
-    })
+      user: userSafe,
+    });
+
   } catch (err) {
     logger.error(`❌ [REGISTER CONTROLLER] Erro ao registrar ${req.body?.email} | ${err.message}`);
     next(err);

@@ -80,41 +80,31 @@ export const register = async ({ name, email, password }) => {
   const user = await User.create({
     name,
     email,
-    password_hash
+    password_hash,
+    user_adm: false
   });
 
   logger.info(`✅ [REGISTER SERVICE] Usuário criado: ${email} (ID: ${user.id})`);
 
-  const token = jwt.sign(
-    {
-      id: user.id,
-      email: user.email
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: '1d'
-    }
-  );
-
-  logger.info(`✅ [REGISTER SERVICE] Token gerado para ${email}`);
-
-  return { user, token };
+  return { user };
 };
 
 export const login = async ({ email, password }) => {
   logger.info(`📥 [LOGIN SERVICE] Tentativa de login: ${email}`);
 
-  logger.info(`📥 [LOGIN SERVICE] Tentativa de login: ${email}`);
-
-  const user = await User.findOne({ 
-    where: { email, status: 'ativo' }
-  });
+  const user = await User.findOne({ where: { email } });
 
   if (!user) {
-    logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado ou inativo: ${email}`);
     logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado: ${email}`);
-    const error = new Error('Usuário não encontrado ou inativo');
-    error.statusCode = 400;
+    const error = new Error('Usuário não encontrado');
+    error.statusCode = 404; // ou 400 se preferir
+    throw error;
+  }
+
+  if (user.status === 'inativo') {
+    logger.warn(`⚠️ [LOGIN SERVICE] Usuário inativo: ${email}`);
+    const error = new Error('Usuário inativo');
+    error.statusCode = 403; // 403 Forbidden faz sentido aqui
     throw error;
   }
 
