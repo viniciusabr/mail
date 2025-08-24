@@ -24,16 +24,17 @@ export const registerSchema = Joi.object({
     }),
 
   password: Joi.string()
-    .min(6)
+    .min(8)
+    .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
     .required()
     .messages({
       'string.base': 'Senha deve ser um texto',
-      'string.min': 'Senha deve ter no mínimo 6 caracteres',
+      'string.min': 'Senha deve ter no mínimo 8 caracteres',
+      'string.pattern.base': 'Senha deve conter pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial',
       'string.empty': 'Senha é obrigatória',
       'any.required': 'Senha é obrigatória'
     })
 });
-
 
 export const loginSchema = Joi.object({
   email: Joi.string()
