@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import express from "express";
 import "../src/database/index.js";
 import cors from "cors";
-import customerRoutes from "./app/routes/email.routes.js";
+import emailsRoutes from "./app/routes/email.routes.js";
 import { errorHandler } from "./app/middlewares/error.handler.js";
 import authRoutes from "./app/routes/auth.routes.js"
 import { createBullBoard } from 'bull-board';
@@ -33,7 +33,7 @@ app.use(cors({
 
 app.use('/admin/queues', router);
 
-app.use('/api', customerRoutes)
+app.use('/api', emailsRoutes)
 
 app.use('/api/auth', authRoutes)
 
