@@ -2,8 +2,7 @@ import dotenv from 'dotenv'
 import express from "express";
 import "../src/database/index.js";
 import cors from "cors";
-import customerRoutes from "./app/routes/customer.routes.js";
-import emailAuthRoutes from "./app/routes/email.auth.js"
+import customerRoutes from "./app/routes/email.routes.js";
 import { errorHandler } from "./app/middlewares/error.handler.js";
 import authRoutes from "./app/routes/auth.routes.js"
 import { createBullBoard } from 'bull-board';
@@ -40,8 +39,6 @@ app.use('/api/auth', authRoutes)
 
 app.use('/api/admin', adminRoutes)
 
-
-// app.use('/api/auth', emailAuthRoutes)
 
 app.use(errorHandler)
 
