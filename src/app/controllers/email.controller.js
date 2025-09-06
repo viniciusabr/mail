@@ -1,7 +1,7 @@
 import logger from "../../config/logger.js";
 import {
   sendCustomerEmails as sendCustomerEmailsService,
-} from "../services/customer.service.js";
+} from "../services/email.service.js";
 
 import { validateDuplicates } from "../utils/validate.duplicates.js";
 import { customersArraySchema } from "../validations/customer.validation.js";

@@ -2,7 +2,7 @@ import validator from 'validator'
 import { addEmailToQueue } from "../../jobs/email.job.js";
 
 
-const processCustomer = async ({ name, email, caso, data }, user_id) => {
+const processRecipient = async ({ name, email, caso, data }, user_id) => {
   if (!validator.isEmail(email)) {
     return { status: 'failed', name, email, error: 'Email inválido' };
   }
@@ -16,9 +16,9 @@ const processCustomer = async ({ name, email, caso, data }, user_id) => {
   }
 }
 
-export const sendCustomerEmails = async (customers, user_id) => {
+export const sendCustomerEmails = async (recipients, user_id) => {
 
-  const tasks = customers.map((customer) => processCustomer(customer, user_id))
+  const tasks = recipients.map((recipient) => processRecipient(recipient, user_id))
 
   const results = await Promise.all(tasks)
 
