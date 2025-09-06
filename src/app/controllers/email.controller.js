@@ -1,23 +1,11 @@
 import logger from "../../config/logger.js";
 import {
   sendCustomerEmails as sendCustomerEmailsService,
-  getAllCustomers as getAllCustomersService
 } from "../services/customer.service.js";
 
 import { validateDuplicates } from "../utils/validate.duplicates.js";
 import { customersArraySchema } from "../validations/customer.validation.js";
 
-
-export const getAllCustomers = async (_req, res, next) => {
-
-  try {
-    const customers = await getAllCustomersService()
-    res.status(200).json(customers)
-  } catch (error) {
-    next(error)
-  }
-
-}
 
 export const sendCustomerEmails = async (req, res, next) => {
   const { data } = req.body

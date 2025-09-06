@@ -1,20 +1,5 @@
-import Customer from "../models/Customer.js"
 import validator from 'validator'
 import { addEmailToQueue } from "../../jobs/email.job.js";
-
-
-export const getAllCustomers = async () => {
-  const customers = await Customer.findAll()
-
-  if (!customers || customers.length === 0) {
-    const error = new Error('')
-    error.statusCode = 404
-    throw error
-  }
-
-  return customers
-}
-
 
 
 const processCustomer = async ({ name, email, caso, data }, user_id) => {
