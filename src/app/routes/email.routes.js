@@ -5,7 +5,7 @@ import { limiter } from "../middlewares/rate.limit.js";
 
 const router = Router()
 
-router.post("/customers", authenticate, limiter, sendCustomerEmails)
+router.post("/email/send", authenticate, limiter, sendCustomerEmails)
 
 router.get("/customers", getAllCustomers)
 
