@@ -57,13 +57,14 @@ export const login = async (req, res, next) => {
 
     logger.info(`📥 [LOGIN CONTROLLER] Tentativa de login: ${email}`);
 
-    const token = await loginService({ email, password });
+    const {token, user} = await loginService({ email, password });
 
     logger.info(`✅ [LOGIN CONTROLLER] Login bem-sucedido: ${email}`);
 
     res.status(200).json({
       message: "Login bem-sucedido",
-      token
+      token,
+      user
     });
   } catch (err) {
     logger.error(`❌ [LOGIN CONTROLLER] Falha no login de ${req.body?.email} | ${err.message}`);

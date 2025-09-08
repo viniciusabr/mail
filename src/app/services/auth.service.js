@@ -97,14 +97,14 @@ export const login = async ({ email, password }) => {
   if (!user) {
     logger.warn(`⚠️ [LOGIN SERVICE] Usuário não encontrado: ${email}`);
     const error = new Error('Usuário não encontrado');
-    error.statusCode = 404; // ou 400 se preferir
+    error.statusCode = 404;
     throw error;
   }
 
   if (user.status === 'inativo') {
     logger.warn(`⚠️ [LOGIN SERVICE] Usuário inativo: ${email}`);
     const error = new Error('Usuário inativo');
-    error.statusCode = 403; // 403 Forbidden faz sentido aqui
+    error.statusCode = 403;
     throw error;
   }
 
@@ -120,7 +120,8 @@ export const login = async ({ email, password }) => {
   const token = jwt.sign(
     {
       id: user.id,
-      email: user.email
+      email: user.email,
+      user_adm: user.user_adm 
     },
     process.env.JWT_SECRET,
     {
@@ -130,5 +131,14 @@ export const login = async ({ email, password }) => {
 
   logger.info(`✅ [LOGIN SERVICE] Token gerado para ${email}`);
 
-  return token;
+  // retorna token + dados do usuário (sem senha!)
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      user_adm: user.user_adm
+    }
+  };
 };
+
