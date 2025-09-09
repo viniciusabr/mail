@@ -9,6 +9,7 @@ import { createBullBoard } from 'bull-board';
 import { BullAdapter } from 'bull-board/bullAdapter.js';
 import emailQueue from './queues/email.queue.js';
 import helmet from 'helmet';
+import templateRoutes from './app/routes/template.routes.js'
 import adminRoutes from './app/routes/admin.routes.js'
 
 const { router } = createBullBoard([
@@ -33,11 +34,13 @@ app.use(cors({
 
 app.use('/admin/queues', router);
 
-app.use('/api', emailRoutes)
+app.use('/api/email', emailRoutes)
 
 app.use('/api/auth', authRoutes)
 
 app.use('/api/admin', adminRoutes)
+
+app.use('/api/templates', templateRoutes)
 
 
 app.use(errorHandler)

@@ -5,6 +5,6 @@ import { limiter } from "../middlewares/rate.limit.js";
 
 const router = Router()
 
-router.post("/email/send", authenticate, limiter, sendCustomerEmails)
+router.post("/send", authenticate, limiter, sendCustomerEmails)
 
 export default router
