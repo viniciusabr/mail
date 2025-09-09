@@ -3,8 +3,6 @@ import generateSurveyReminder from "../app/utils/generateSurveyReminder.js";
 import { sendSurveyReminderEmail } from "../app/utils/send.email.js";
 import logger from "../config/logger.js";
 import emailQueue from "../queues/email.queue.js";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import path from 'path';
 
 emailQueue.process(1, async (job) => {
@@ -19,8 +17,6 @@ emailQueue.process(1, async (job) => {
   let errorMessage = null;
 
   try {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
     const templatePath = path.resolve(process.cwd(), 'src', 'app', 'utils', 'email-template-novo.mjml');
     const emailContent = generateSurveyReminder(
       templatePath,

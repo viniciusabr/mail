@@ -1,24 +1,13 @@
 import logger from "../../config/logger.js";
 import {
-  createCustomerAndSendEmail as createCustomerAndSendEmailService,
-  getAllCustomers as getAllCustomersService
-} from "../services/customer.service.js";
+  sendCustomerEmails as sendCustomerEmailsService,
+} from "../services/email.service.js";
+
 import { validateDuplicates } from "../utils/validate.duplicates.js";
 import { customersArraySchema } from "../validations/customer.validation.js";
 
 
-export const getAllCustomers = async (_req, res, next) => {
-
-  try {
-    const customers = await getAllCustomersService()
-    res.status(200).json(customers)
-  } catch (error) {
-    next(error)
-  }
-
-}
-
-export const createCustomerAndSendEmail = async (req, res, next) => {
+export const sendCustomerEmails = async (req, res, next) => {
   const { data } = req.body
   try {
     if (data.length > 40) {
@@ -36,7 +25,7 @@ export const createCustomerAndSendEmail = async (req, res, next) => {
 
     const { id: user_id } = req.user
 
-    const result = await createCustomerAndSendEmailService(data, user_id);
+    const result = await sendCustomerEmailsService(data, user_id);
     return res.status(200).json(result);
   } catch (err) {
     logger.error(`❌ [CUSTOMER CONTROLLER] Erro inesperado no envio de e-mails | ${err.message}`);
