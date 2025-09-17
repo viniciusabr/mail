@@ -3,7 +3,7 @@ import express from "express";
 import "../src/database/index.js";
 import cors from "cors";
 import customerRoutes from "./app/routes/customer.routes.js";
-import emailAuthRoutes from "./app/routes/email.auth.js"
+//import emailAuthRoutes from "./app/routes/email.auth.js"
 import { errorHandler } from "./app/middlewares/error.handler.js";
 import authRoutes from "./app/routes/auth.routes.js"
 import { createBullBoard } from 'bull-board';
@@ -11,6 +11,8 @@ import { BullAdapter } from 'bull-board/bullAdapter.js';
 import emailQueue from './queues/email.queue.js';
 import helmet from 'helmet';
 import adminRoutes from './app/routes/admin.routes.js'
+
+import profile from "./app/routes/profile.routes.js"
 
 const { router } = createBullBoard([
   new BullAdapter(emailQueue)
@@ -35,6 +37,8 @@ app.use(cors({
 app.use('/admin/queues', router);
 
 app.use('/api', customerRoutes)
+
+app.use("/api/users", profile)
 
 app.use('/api/auth', authRoutes)
 
