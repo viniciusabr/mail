@@ -11,6 +11,7 @@ import emailQueue from './queues/email.queue.js';
 import helmet from 'helmet';
 import templateRoutes from './app/routes/template.routes.js'
 import adminRoutes from './app/routes/admin.routes.js'
+import userRoutes from './app/routes/user.routes.js'
 
 const { router } = createBullBoard([
   new BullAdapter(emailQueue)
@@ -36,7 +37,7 @@ app.use('/admin/queues', router);
 
 app.use('/api/email', emailRoutes)
 
-app.use("/api/users", profile)
+app.use("/api/users", userRoutes)
 
 app.use('/api/auth', authRoutes)
 
