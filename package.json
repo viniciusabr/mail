@@ -43,6 +43,7 @@
     "dev": "nodemon src/server.js",
     "fix-esm": "node scripts/fix.to-esm.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-    "test:cov": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --coverage"
+    "test:cov": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --coverage",
+    "start": "node src/server.js"
   }
 }
