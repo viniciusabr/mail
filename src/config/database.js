@@ -12,10 +12,11 @@ export default {
 
   },
   production: {
-    dialect: process.env.DB_DIALECT_PROD,
-    username: process.env.DB_USERNAME_PROD,
-    password: process.env.DB_PASSWORD_PROD,
+    url: process.env.DATABASE_URL,
+    dialect: 'mysql',
     database: process.env.DB_DATABASE_PROD,
-    host: process.env.DB_HOST_PROD,
+    dialectOptions: {
+      ssl: { require: false }, // Railway aceita sem SSL, mas deixa aqui pra segurança
+    },
   }
 };
