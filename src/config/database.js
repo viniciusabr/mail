@@ -16,7 +16,10 @@ export default {
     dialect: 'mysql',
     database: process.env.DB_DATABASE_PROD,
     dialectOptions: {
-      ssl: { require: false }, // Railway aceita sem SSL, mas deixa aqui pra segurança
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      },
     },
   }
 };
