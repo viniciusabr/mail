@@ -1,19 +1,38 @@
-import Queue from 'bull'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const redisConfig = process.env.UPSTASH_REDIS_TLS_URL
-  ? process.env.UPSTASH_REDIS_TLS_URL
-  : {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT)
-  }
+import Queue from 'bull'
 
-const emailQueue = new Queue('emailQueue', redisConfig, {
-  limiter: {
-    max: 1,
-    duration: 3000
-  }
-})
+
+const emailQueue = process.env.UPSTASH_REDIS_TLS_URL
+  ? new Queue('emailQueue', process.env.UPSTASH_REDIS_TLS_URL, {
+    limiter: {
+      max: 1,
+      duration: 3000
+    }
+  })
+  :
+  new Queue('emailQueue', {
+    redis: {
+      host: process.env.REDIS_HOST,
+      port: Number(process.env.REDIS_PORT || 6379)
+    }
+  },
+    {
+      limiter: {
+        max: 1,
+        duration: 3000
+      }
+    })
+
+
+emailQueue.on('ready', () => {
+  console.log('✅ Fila conectada ao Redis com sucesso!');
+});
+
+emailQueue.on('error', (err) => {
+  console.error('❌ Erro ao conectar ao Redis:', err);
+});
+
 
 export default emailQueue
