@@ -30,6 +30,7 @@
     "npm": "^11.6.0",
     "replace-in-file": "^8.3.0",
     "sequelize": "^6.37.7",
+    "sib-api-v3-sdk": "^8.5.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {
