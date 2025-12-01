@@ -56,11 +56,8 @@ import Queue from 'bull'
 
 const emailQueue = new Queue('emailQueue', {
   redis: {
-    host: process.env.UPSTASH_REDIS_HOST,
-    port: Number(process.env.UPSTASH_REDIS_PORT),
-    username: process.env.UPSTASH_REDIS_USER,
-    password: process.env.UPSTASH_REDIS_PASS,
-    tls: {}
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
   },
   limiter: {
     max: 1,

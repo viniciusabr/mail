@@ -47,44 +47,81 @@
 
 
 
-import SibApiV3Sdk from "sib-api-v3-sdk";
+//import SibApiV3Sdk from "sib-api-v3-sdk";
+//import dotenv from "dotenv";
+//import logger from "../../config/logger.js";
+
+//dotenv.config();
+
+// 1️⃣ Cria instância do cliente
+//const client = SibApiV3Sdk.ApiClient.instance;
+
+// 2️⃣ Configura a autenticação via API KEY
+//const apiKey = client.authentications["api-key"];
+//apiKey.apiKey = process.env.BREVO_API_KEY;
+
+// 3️⃣ Cria o objeto que usaremos para enviar e-mails
+//export const brevoApi = new SibApiV3Sdk.TransactionalEmailsApi();
+
+/**
+ * Envia e-mail de lembrete de pesquisa via Brevo API
+ */
+//export const sendSurveyReminderEmail = async (recipientEmail, htmlContent) => {
+ // try {
+ //   const senderEmail = process.env.BREVO_SENDER_EMAIL;
+  //  const senderName = process.env.BREVO_SENDER_NAME || 'Equipe CSAT';
+  //  const replyToEmail = process.env.REPLY_TO_EMAIL;
+
+  //  const payload = {
+ //     sender: { email: senderEmail, name: senderName },
+ //     replyTo: { email: replyToEmail },
+  //    to: [{ email: recipientEmail }],
+   //   subject: "🗓️ Lembrete: Pesquisa de Satisfação - Microvix",
+  //    htmlContent
+  //  };
+
+  //  const response = await brevoApi.sendTransacEmail(payload);
+ //   logger.info(`✅ E-mail enviado para ${recipientEmail} | Message ID: ${response.messageId || 'sem ID'}`);
+ //   return response;
+//  } catch (error) {
+ //   logger.error(`❌ Erro ao enviar e-mail via Brevo: ${error.message}`);
+//throw error;
+ // }
+//};
+
+import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import logger from "../../config/logger.js";
 
 dotenv.config();
 
-// 1️⃣ Cria instância do cliente
-const client = SibApiV3Sdk.ApiClient.instance;
-
-// 2️⃣ Configura a autenticação via API KEY
-const apiKey = client.authentications["api-key"];
-apiKey.apiKey = process.env.BREVO_API_KEY;
-
-// 3️⃣ Cria o objeto que usaremos para enviar e-mails
-export const brevoApi = new SibApiV3Sdk.TransactionalEmailsApi();
+// Transporter usando Outlook/Hotmail
+const transporter = nodemailer.createTransport({
+  service: "Outlook", // pode ser "Outlook" ou "hotmail"
+  auth: {
+    user: process.env.OUTLOOK_USER,
+    pass: process.env.OUTLOOK_PASS
+  }
+});
 
 /**
- * Envia e-mail de lembrete de pesquisa via Brevo API
+ * Envia email de lembrete de pesquisa via SMTP (sem Brevo)
  */
 export const sendSurveyReminderEmail = async (recipientEmail, htmlContent) => {
   try {
-    const senderEmail = process.env.BREVO_SENDER_EMAIL;
-    const senderName = process.env.BREVO_SENDER_NAME || 'Equipe CSAT';
-    const replyToEmail = process.env.REPLY_TO_EMAIL;
-
-    const payload = {
-      sender: { email: senderEmail, name: senderName },
-      replyTo: { email: replyToEmail },
-      to: [{ email: recipientEmail }],
+    const mailOptions = {
+      from: `"Equipe CSAT" <${process.env.OUTLOOK_USER}>`,
+      to: recipientEmail,
       subject: "🗓️ Lembrete: Pesquisa de Satisfação - Microvix",
-      htmlContent
+      html: htmlContent,
     };
 
-    const response = await brevoApi.sendTransacEmail(payload);
-    logger.info(`✅ E-mail enviado para ${recipientEmail} | Message ID: ${response.messageId || 'sem ID'}`);
-    return response;
+    const info = await transporter.sendMail(mailOptions);
+
+    logger.info(`📤 E-mail enviado para ${recipientEmail} | ID: ${info.messageId}`);
+    return info;
   } catch (error) {
-    logger.error(`❌ Erro ao enviar e-mail via Brevo: ${error.message}`);
+    logger.error(`❌ Erro ao enviar e-mail via SMTP: ${error.message}`);
     throw error;
   }
 };
