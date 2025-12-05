@@ -6,7 +6,8 @@ import emailQueue from "../queues/email.queue.js";
 import path from 'path';
 
 emailQueue.process(1, async (job) => {
-  const { name, email, caso, user_id } = job.data;
+  const { name, email, caso, user_id } = job.data; 
+  // ATENÇÃO: user_id é o ID do usuário que possui email + app_password configurados
 
   const tentativaAtual = job.attemptsMade + 1;
   const maxTentativas = job.opts.attempts;
@@ -17,18 +18,31 @@ emailQueue.process(1, async (job) => {
   let errorMessage = null;
 
   try {
-    const templatePath = path.resolve(process.cwd(), 'src', 'app', 'utils', 'email-template-novo.mjml');
+    const templatePath = path.resolve(process.cwd(), "src", "app", "utils", "email-template-novo.mjml");
+
     const emailContent = generateSurveyReminder(
       templatePath,
       { nome: name, caso }
     );
-    await sendSurveyReminderEmail(email, emailContent);
+
+    // ⛔ ERRADO (antes):
+    // await sendSurveyReminderEmail(email, emailContent);
+
+    // ✅ CERTO:
+    await sendSurveyReminderEmail(
+      user_id,      // usuário que envia o e-mail
+      email,        // destinatário
+      emailContent  // HTML final
+    );
+
     logger.info(`✅ [PROCESSOR] E-mail enviado para: ${email}`);
+
   } catch (err) {
     envioStatus = 'FAILED';
     errorMessage = err.message;
     logger.error(`❌ [PROCESSOR] Erro ao enviar e-mail: ${email} | ${err.message}`);
     throw err;
+
   } finally {
     try {
       await EmailLog.create({
@@ -39,9 +53,10 @@ emailQueue.process(1, async (job) => {
         sent_at: envioStatus === 'SUCCESS' ? new Date() : null,
         error_message: errorMessage,
       });
+
       logger.info(`📥 [PROCESSOR] Log salvo: ${email} | Status: ${envioStatus}`);
     } catch (err) {
-      logger.error(`❌ [PROCESSOR] Falha ao salvar log de ${envioStatus}: ${email} | ${err.message}`);
+      logger.error(`❌ [PROCESSOR] Falha ao salvar log: ${email} | ${err.message}`);
     }
   }
 });

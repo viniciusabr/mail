@@ -90,27 +90,35 @@
 //};
 
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
 import logger from "../../config/logger.js";
+import * as userService from "../services/user.service.js";
 
-dotenv.config();
-
-// Transporter usando Outlook/Hotmail
-const transporter = nodemailer.createTransport({
-  service: "Outlook", // pode ser "Outlook" ou "hotmail"
-  auth: {
-    user: process.env.OUTLOOK_USER,
-    pass: process.env.OUTLOOK_PASS
-  }
-});
-
-/**
- * Envia email de lembrete de pesquisa via SMTP (sem Brevo)
- */
-export const sendSurveyReminderEmail = async (recipientEmail, htmlContent) => {
+export const sendSurveyReminderEmail = async (userId, recipientEmail, htmlContent) => {
   try {
+    // Buscar usuário com email + senha de aplicativo
+    const user = await userService.getUserById(userId, false, true);
+
+    if (!user) {
+      throw new Error("Usuário não encontrado.");
+    }
+
+    if (!user.email || !user.app_password) {
+      throw new Error("Usuário não configurou o e-mail ou a senha do aplicativo.");
+    }
+
+    // Transporter SMTP (Outlook / Office365)
+    const transporter = nodemailer.createTransport({
+      host: "smtp.office365.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: user.email,
+        pass: user.app_password,
+      },
+    });
+
     const mailOptions = {
-      from: `"Equipe CSAT" <${process.env.OUTLOOK_USER}>`,
+      from: `"Equipe CSAT" <${user.email}>`,
       to: recipientEmail,
       subject: "🗓️ Lembrete: Pesquisa de Satisfação - Microvix",
       html: htmlContent,
@@ -120,11 +128,15 @@ export const sendSurveyReminderEmail = async (recipientEmail, htmlContent) => {
 
     logger.info(`📤 E-mail enviado para ${recipientEmail} | ID: ${info.messageId}`);
     return info;
+
   } catch (error) {
-    logger.error(`❌ Erro ao enviar e-mail via SMTP: ${error.message}`);
+    logger.error(`❌ Erro SMTP: ${error.message}`);
     throw error;
   }
 };
+
+
+
 
 
 
