@@ -6,8 +6,8 @@ import emailQueue from "../queues/email.queue.js";
 import path from 'path';
 
 emailQueue.process(1, async (job) => {
-  const { name, email, caso, user_id } = job.data; 
-  // ATENÇÃO: user_id é o ID do usuário que possui email + app_password configurados
+  const { name, email, casos, user_id } = job.data; 
+  // ATENÇÃO: agora "casos" já é string formatada (Nº1234, Nº5678)
 
   const tentativaAtual = job.attemptsMade + 1;
   const maxTentativas = job.opts.attempts;
@@ -18,21 +18,24 @@ emailQueue.process(1, async (job) => {
   let errorMessage = null;
 
   try {
-    const templatePath = path.resolve(process.cwd(), "src", "app", "utils", "email-template-novo.mjml");
-
-    const emailContent = generateSurveyReminder(
-      templatePath,
-      { nome: name, caso }
+    const templatePath = path.resolve(
+      process.cwd(),
+      "src",
+      "app",
+      "utils",
+      "email-template-novo.mjml"
     );
 
-    // ⛔ ERRADO (antes):
-    // await sendSurveyReminderEmail(email, emailContent);
+    // 👇 Agora usamos diretamente a string pronta enviada pelo email.service!
+    const emailContent = generateSurveyReminder(
+      templatePath,
+      { nome: name, casos }
+    );
 
-    // ✅ CERTO:
     await sendSurveyReminderEmail(
-      user_id,      // usuário que envia o e-mail
-      email,        // destinatário
-      emailContent  // HTML final
+      user_id,
+      email,
+      emailContent
     );
 
     logger.info(`✅ [PROCESSOR] E-mail enviado para: ${email}`);
@@ -40,6 +43,7 @@ emailQueue.process(1, async (job) => {
   } catch (err) {
     envioStatus = 'FAILED';
     errorMessage = err.message;
+
     logger.error(`❌ [PROCESSOR] Erro ao enviar e-mail: ${email} | ${err.message}`);
     throw err;
 
@@ -48,15 +52,20 @@ emailQueue.process(1, async (job) => {
       await EmailLog.create({
         user_id,
         recipient_email: email,
-        caso,
+        caso: casos, // <-- JÁ É STRING FORMATADA!
         envio_status: envioStatus,
         sent_at: envioStatus === 'SUCCESS' ? new Date() : null,
         error_message: errorMessage,
       });
 
-      logger.info(`📥 [PROCESSOR] Log salvo: ${email} | Status: ${envioStatus}`);
+      logger.info(
+        `📥 [PROCESSOR] Log salvo: ${email} | Status: ${envioStatus}`
+      );
+
     } catch (err) {
-      logger.error(`❌ [PROCESSOR] Falha ao salvar log: ${email} | ${err.message}`);
+      logger.error(
+        `❌ [PROCESSOR] Falha ao salvar log: ${email} | ${err.message}`
+      );
     }
   }
 });

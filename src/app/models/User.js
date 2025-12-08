@@ -9,11 +9,7 @@ super.init(
 {
 name: DataTypes.STRING,
 email: DataTypes.STRING,
-
-
 password_hash: DataTypes.STRING, // senha normal continua hash
-
-
 user_adm: DataTypes.BOOLEAN,
 status: DataTypes.ENUM('ativo', 'inativo'),
 

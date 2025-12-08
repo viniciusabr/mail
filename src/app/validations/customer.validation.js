@@ -18,16 +18,26 @@ const customerSchema = Joi.object({
       'any.required': 'E-mail é obrigatório'
     }),
 
-  caso: Joi.string()
-    .length(8)
-    .pattern(/^\d+$/)
+  casos: Joi.array()
+    .items(
+      Joi.string()
+        .length(8)
+        .pattern(/^\d+$/)
+        .required()
+        .messages({
+          'string.base': 'Cada caso deve ser um texto numérico',
+          'string.empty': 'Cada caso é obrigatório',
+          'string.length': 'Cada caso deve ter exatamente 8 dígitos',
+          'string.pattern.base': 'Cada caso deve conter apenas números',
+          'any.required': 'Caso é obrigatório'
+        })
+    )
+    .min(1)
     .required()
     .messages({
-      'string.base': 'Campo "caso" deve ser um texto numérico',
-      'string.empty': 'Campo "caso" é obrigatório',
-      'string.length': 'Campo "caso" deve ter exatamente 8 dígitos',
-      'string.pattern.base': 'Campo "caso" deve conter apenas números',
-      'any.required': 'Campo "caso" é obrigatório'
+      'array.base': 'O campo "casos" deve ser uma lista',
+      'array.min': 'Pelo menos um caso deve ser informado',
+      'any.required': 'Campo "casos" é obrigatório'
     }),
 
   data: Joi.date()

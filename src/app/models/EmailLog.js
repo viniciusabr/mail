@@ -18,9 +18,10 @@ class EmailLog extends Model {
           allowNull: false,
         },
         caso: {
-          type: DataTypes.STRING(8),
+          type: DataTypes.JSON,
           allowNull: false,
         },
+
         envio_status: {
           type: DataTypes.ENUM('PENDING', 'SUCCESS', 'FAILED'),
           allowNull: false,

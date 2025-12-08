@@ -53,7 +53,7 @@
               </mj-text>
 
               <mj-text font-size="16px" padding="10px 20px 0 20px" line-height="1.6">
-                A avaliação é enviada por e-mail com o título <strong>"Pesquisa de Satisfação Linx Chamado Nº{{caso}}"</strong>
+                A avaliação é enviada por e-mail com o título <strong>"Pesquisa de Satisfação Linx Chamado {{casos}}"</strong>
               </mj-text>
 
               <mj-text font-size="16px" padding="10px 20px" line-height="1.6">
