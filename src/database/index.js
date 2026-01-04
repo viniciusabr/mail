@@ -1,36 +1,33 @@
 import { Sequelize } from 'sequelize';
+
 import Customer from '../app/models/Customer.js';
 import User from '../app/models/User.js';
 import EmailLog from '../app/models/EmailLog.js';
-import dbConfig from '../config/database.js';
-import dotenv from 'dotenv';
 
-dotenv.config();
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'mysql',
+    logging: false,
+  }
+);
 
-const environment = process.env.NODE_ENV || 'development';
-const currentConfig = dbConfig[environment];
-
-const sequelize = currentConfig.url
-  ? new Sequelize(currentConfig.url, currentConfig)
-  : new Sequelize(currentConfig);
-
+// Inicializa models
 Customer.init(sequelize);
 User.initModel(sequelize);
 EmailLog.init(sequelize);
 
+// Teste de conexão (não derruba o app)
 async function testDatabaseConnection() {
   try {
     await sequelize.authenticate();
-    console.log('✅ Conexão com o banco estabelecida.');
-
-    if (environment === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('🔄 Tabelas sincronizadas (dev).');
-    }
-
+    console.log('✅ Conectado ao MySQL (Railway)');
   } catch (error) {
     console.error('❌ Erro ao conectar no banco:', error);
-    process.exit(1);
   }
 }
 
