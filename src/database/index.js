@@ -1,8 +1,17 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 import Customer from '../app/models/Customer.js';
 import User from '../app/models/User.js';
 import EmailLog from '../app/models/EmailLog.js';
+
+dotenv.config(); // 👈 MUITO IMPORTANTE
+
+console.log('DB_HOST =>', process.env.DB_HOST);
+console.log('DB_PORT =>', process.env.DB_PORT);
+console.log('DB_NAME =>', process.env.DB_NAME);
+console.log('DB_USER =>', process.env.DB_USER);
+// ❌ NÃO logue a senha em produção
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -15,22 +24,3 @@ const sequelize = new Sequelize(
     logging: false,
   }
 );
-
-// Inicializa models
-Customer.init(sequelize);
-User.initModel(sequelize);
-EmailLog.init(sequelize);
-
-// Teste de conexão (não derruba o app)
-async function testDatabaseConnection() {
-  try {
-    await sequelize.authenticate();
-    console.log('✅ Conectado ao MySQL (Railway)');
-  } catch (error) {
-    console.error('❌ Erro ao conectar no banco:', error);
-  }
-}
-
-testDatabaseConnection();
-
-export default sequelize;
