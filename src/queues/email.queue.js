@@ -55,11 +55,14 @@ const emailQueue = new Queue('emailQueue', {
   redis: {
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT),
+    password: process.env.REDIS_PASSWORD,
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
   },
 });
 
 emailQueue.on('ready', () => {
-  console.log('✅ Redis conectado via rede privada (Railway)');
+  console.log('✅ Redis conectado com autenticação (Railway)');
 });
 
 emailQueue.on('error', (err) => {
@@ -67,6 +70,7 @@ emailQueue.on('error', (err) => {
 });
 
 export default emailQueue;
+
 
 
 
