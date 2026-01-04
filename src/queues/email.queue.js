@@ -51,16 +51,15 @@
 
 import Queue from 'bull';
 
-const emailQueue = new Queue('emailQueue', process.env.REDIS_URL, {
+const emailQueue = new Queue('emailQueue', {
   redis: {
-    tls: {
-      rejectUnauthorized: false,
-    },
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
   },
 });
 
 emailQueue.on('ready', () => {
-  console.log('✅ Redis conectado (Railway)');
+  console.log('✅ Redis conectado via rede privada (Railway)');
 });
 
 emailQueue.on('error', (err) => {
@@ -68,6 +67,7 @@ emailQueue.on('error', (err) => {
 });
 
 export default emailQueue;
+
 
 
 
