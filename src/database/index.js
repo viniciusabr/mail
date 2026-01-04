@@ -1,33 +1,35 @@
 import { Sequelize } from 'sequelize';
 import Customer from '../app/models/Customer.js';
 import User from '../app/models/User.js';
-import dbConfig from '../config/database.js';
 import EmailLog from '../app/models/EmailLog.js';
-import dotenv from 'dotenv'
+import dbConfig from '../config/database.js';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
-const environment = process.env.NODE_ENV || 'development'
+const environment = process.env.NODE_ENV || 'development';
 const currentConfig = dbConfig[environment];
 
 const sequelize = currentConfig.url
   ? new Sequelize(currentConfig.url, currentConfig)
-  : new Sequelize(currentConfig)
+  : new Sequelize(currentConfig);
 
 Customer.init(sequelize);
 User.initModel(sequelize);
-EmailLog.init(sequelize)
+EmailLog.init(sequelize);
 
 async function testDatabaseConnection() {
   try {
     await sequelize.authenticate();
-    console.log('Conexão com o banco de dados estabelecida com sucesso.');
+    console.log('✅ Conexão com o banco estabelecida.');
 
-    await sequelize.sync({ alter: true });
-    console.log('Tabelas sincronizadas com sucesso.');
+    if (environment === 'development') {
+      await sequelize.sync({ alter: true });
+      console.log('🔄 Tabelas sincronizadas (dev).');
+    }
 
   } catch (error) {
-    console.error('Não foi possível conectar ao banco de dados:', error);
+    console.error('❌ Erro ao conectar no banco:', error);
     process.exit(1);
   }
 }
