@@ -54,18 +54,12 @@ dotenv.config();
 
 import Queue from 'bull';
 
-const redisPort = Number(process.env.REDIS_PORT);
-
-if (Number.isNaN(redisPort)) {
-  console.warn('⚠️ Redis não configurado. Fila não iniciada.');
-}
-
 const emailQueue = new Queue('emailQueue', {
   redis: {
     host: process.env.REDIS_HOST,
-    port: redisPort,
+    port: Number(process.env.REDIS_PORT),
     password: process.env.REDIS_PASSWORD,
-    tls: {}, // necessário para Redis em cloud
+    tls: {}, // obrigatório no Upstash
   },
   limiter: {
     max: 1,
@@ -73,5 +67,14 @@ const emailQueue = new Queue('emailQueue', {
   },
 });
 
+emailQueue.on('ready', () => {
+  console.log('✅ Fila conectada ao Redis com sucesso!');
+});
+
+emailQueue.on('error', (err) => {
+  console.error('❌ Erro no Redis:', err);
+});
+
 export default emailQueue;
+
 
