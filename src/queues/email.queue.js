@@ -49,26 +49,18 @@
 
 
 
-import dotenv from 'dotenv';
-dotenv.config();
-
 import Queue from 'bull';
 
-const emailQueue = new Queue('emailQueue', {
+const emailQueue = new Queue('emailQueue', process.env.REDIS_URL, {
   redis: {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
-    password: process.env.REDIS_PASSWORD,
-    tls: {}, // obrigatório no Upstash
-  },
-  limiter: {
-    max: 1,
-    duration: 3000,
+    tls: {
+      rejectUnauthorized: false,
+    },
   },
 });
 
 emailQueue.on('ready', () => {
-  console.log('✅ Fila conectada ao Redis com sucesso!');
+  console.log('✅ Redis conectado (Railway)');
 });
 
 emailQueue.on('error', (err) => {
@@ -76,5 +68,6 @@ emailQueue.on('error', (err) => {
 });
 
 export default emailQueue;
+
 
 
