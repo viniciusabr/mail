@@ -5,13 +5,7 @@ import Customer from '../app/models/Customer.js';
 import User from '../app/models/User.js';
 import EmailLog from '../app/models/EmailLog.js';
 
-dotenv.config(); // 👈 MUITO IMPORTANTE
-
-console.log('DB_HOST =>', process.env.DB_HOST);
-console.log('DB_PORT =>', process.env.DB_PORT);
-console.log('DB_NAME =>', process.env.DB_NAME);
-console.log('DB_USER =>', process.env.DB_USER);
-// ❌ NÃO logue a senha em produção
+dotenv.config();
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -24,3 +18,14 @@ const sequelize = new Sequelize(
     logging: false,
   }
 );
+
+// ✅ INICIALIZA TODOS OS MODELS
+Customer.init(sequelize);
+User.initModel(sequelize); // 👈 ISSO ESTAVA FALTANDO
+EmailLog.init(sequelize);
+
+// (opcional, mas recomendado)
+await sequelize.authenticate();
+console.log('✅ Banco conectado');
+
+export default sequelize;
