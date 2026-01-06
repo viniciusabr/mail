@@ -13,11 +13,6 @@ import templateRoutes from './app/routes/template.routes.js'
 import adminRoutes from './app/routes/admin.routes.js'
 import userRoutes from './app/routes/user.routes.js'
 
-const { router } = createBullBoard([
-  new BullAdapter(emailQueue)
-]);
-
-
 dotenv.config()
 
 const app = express()
@@ -25,34 +20,39 @@ const app = express()
 app.set('trust proxy', 1);
 
 app.use(express.json())
-
 app.use(helmet());
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://mail-front-producao.vercel.app',
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'mail-front-producao.vercel.app'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 
+// 🔥 MUITO IMPORTANTE (preflight)
+app.options('*', cors());
+
+const { router } = createBullBoard([
+  new BullAdapter(emailQueue)
+]);
 
 app.use('/admin/queues', router);
-
 app.use('/api/email', emailRoutes)
-
 app.use("/api/users", userRoutes)
-
 app.use('/api/auth', authRoutes)
-
 app.use('/api/admin', adminRoutes)
-
 app.use('/api/templates', templateRoutes)
 
-
 app.use(errorHandler)
-
 
 export default app
