@@ -7,8 +7,14 @@ class User extends Model {
         name: DataTypes.STRING,
         email: DataTypes.STRING,
         password_hash: DataTypes.STRING,
-        user_adm: DataTypes.BOOLEAN,
-        status: DataTypes.ENUM('ativo', 'inativo'),
+        user_adm: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
+        status: {
+          type: DataTypes.ENUM('ativo', 'inativo'),
+          defaultValue: 'ativo',
+        },
         app_password: DataTypes.STRING,
       },
       {
@@ -16,6 +22,17 @@ class User extends Model {
         tableName: 'users',
         timestamps: true,
         underscored: true,
+
+        hooks: {
+          beforeCreate: async (user, options) => {
+            const totalUsers = await User.count();
+
+            if (totalUsers === 0) {
+              user.status = 'inativo';
+              user.user_adm = false;
+            }
+          },
+        },
       }
     );
   }
