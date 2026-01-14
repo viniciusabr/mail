@@ -108,7 +108,7 @@ export const sendSurveyReminderEmail = async (userId, recipientEmail, htmlConten
 
     // Transporter SMTP (Outlook / Office365)
     const transporter = nodemailer.createTransport({
-      host: "smtp.office365.com",
+      host: "smtp-mail.outlook.com",
       port: 587,
       secure: false,
       auth: {
