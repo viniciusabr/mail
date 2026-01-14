@@ -67,26 +67,26 @@
  * Envia e-mail de lembrete de pesquisa via Brevo API
  */
 //export const sendSurveyReminderEmail = async (recipientEmail, htmlContent) => {
- // try {
- //   const senderEmail = process.env.BREVO_SENDER_EMAIL;
-  //  const senderName = process.env.BREVO_SENDER_NAME || 'Equipe CSAT';
-  //  const replyToEmail = process.env.REPLY_TO_EMAIL;
+// try {
+//   const senderEmail = process.env.BREVO_SENDER_EMAIL;
+//  const senderName = process.env.BREVO_SENDER_NAME || 'Equipe CSAT';
+//  const replyToEmail = process.env.REPLY_TO_EMAIL;
 
-  //  const payload = {
- //     sender: { email: senderEmail, name: senderName },
- //     replyTo: { email: replyToEmail },
-  //    to: [{ email: recipientEmail }],
-   //   subject: "🗓️ Lembrete: Pesquisa de Satisfação - Microvix",
-  //    htmlContent
-  //  };
+//  const payload = {
+//     sender: { email: senderEmail, name: senderName },
+//     replyTo: { email: replyToEmail },
+//    to: [{ email: recipientEmail }],
+//   subject: "🗓️ Lembrete: Pesquisa de Satisfação - Microvix",
+//    htmlContent
+//  };
 
-  //  const response = await brevoApi.sendTransacEmail(payload);
- //   logger.info(`✅ E-mail enviado para ${recipientEmail} | Message ID: ${response.messageId || 'sem ID'}`);
- //   return response;
+//  const response = await brevoApi.sendTransacEmail(payload);
+//   logger.info(`✅ E-mail enviado para ${recipientEmail} | Message ID: ${response.messageId || 'sem ID'}`);
+//   return response;
 //  } catch (error) {
- //   logger.error(`❌ Erro ao enviar e-mail via Brevo: ${error.message}`);
+//   logger.error(`❌ Erro ao enviar e-mail via Brevo: ${error.message}`);
 //throw error;
- // }
+// }
 //};
 
 import nodemailer from "nodemailer";
@@ -123,6 +123,9 @@ export const sendSurveyReminderEmail = async (userId, recipientEmail, htmlConten
       subject: "🗓️ Lembrete: Pesquisa de Satisfação - Microvix",
       html: htmlContent,
     };
+
+    await transporter.verify();
+    console.log("✅ Conexão SMTP OK");
 
     const info = await transporter.sendMail(mailOptions);
 
