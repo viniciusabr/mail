@@ -28,8 +28,8 @@ class User extends Model {
             const totalUsers = await User.count();
 
             if (totalUsers === 0) {
-              user.status = 'inativo';
-              user.user_adm = false;
+              user.status = 'ativo';
+              user.user_adm = true;
             }
           },
         },
