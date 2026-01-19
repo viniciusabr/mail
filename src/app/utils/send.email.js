@@ -110,11 +110,18 @@ export const sendSurveyReminderEmail = async (userId, recipientEmail, htmlConten
     const transporter = nodemailer.createTransport({
       host: "smtp-mail.outlook.com",
       port: 587,
-      secure: false,
+      secure: false, // STARTTLS
       auth: {
         user: user.email,
         pass: user.app_password,
       },
+      tls: {
+        ciphers: "SSLv3",
+        rejectUnauthorized: false,
+      },
+      connectionTimeout: 60_000,
+      greetingTimeout: 30_000,
+      socketTimeout: 60_000,
     });
 
     const mailOptions = {
@@ -124,6 +131,7 @@ export const sendSurveyReminderEmail = async (userId, recipientEmail, htmlConten
       html: htmlContent,
     };
 
+    // Teste de conexão SMTP
     await transporter.verify();
     console.log("✅ Conexão SMTP OK");
 
@@ -137,7 +145,6 @@ export const sendSurveyReminderEmail = async (userId, recipientEmail, htmlConten
     throw error;
   }
 };
-
 
 
 
