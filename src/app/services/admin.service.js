@@ -37,3 +37,34 @@ export const updateUserStatus = async (id, status) => {
     user_adm: user.user_adm
   }
 }
+
+export const updateUserAdm = async (id, user_adm) => {
+  if (![true, false].includes(user_adm)) {
+    logger.warn(`⚠️ [ADMIN SERVICE] user_adm inválido recebido: ${user_adm}`)
+    const error = new Error('Valor de user_adm inválido')
+    error.statusCode = 400
+    throw error
+  }
+
+  const user = await User.findByPk(id)
+
+  if (!user) {
+    logger.warn(`⚠️ [ADMIN SERVICE] Usuário não encontrado: userId=${id}`)
+    const error = new Error('Usuário não encontrado')
+    error.statusCode = 404
+    throw error
+  }
+
+  user.user_adm = user_adm
+  await user.save()
+
+  logger.info(`✅ [ADMIN SERVICE] user_adm atualizado: userId=${id} -> ${user.user_adm}`)
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    status: user.status,
+    user_adm: user.user_adm
+  }
+}
