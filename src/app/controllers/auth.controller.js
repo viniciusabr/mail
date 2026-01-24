@@ -11,7 +11,7 @@ export const register = async (req, res, next) => {
 
     if (!email.endsWith('@linx.com.br')) {
       logger.warn(`⚠️ [REGISTER CONTROLLER] E-mail inválido para registro: ${email}`);
-      return res.status(400).json({ message: 'Cadastro permitido apenas com e-mails @linx.com.br' });
+      return res.status(400).json({ message: 'Utilize seu e-mail corporativo para realizar o cadastro.' });
     }
 
 
