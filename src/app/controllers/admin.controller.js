@@ -37,9 +37,6 @@ export const updateUserAdm = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    console.log("👉 [DEBUG] BODY RECEBIDO:", req.body);
-    console.log("👉 [DEBUG] user_adm:", req.body?.user_adm, "TIPO:", typeof req.body?.user_adm);
-
     const { user_adm } = req.body;
 
     logger.info(`📥 [ADMIN CONTROLLER] PATCH /users/${id}/adm iniciado | user_adm=${user_adm}`);
