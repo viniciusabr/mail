@@ -39,9 +39,10 @@ export const updateUserStatus = async (id, status) => {
 }
 
 export const updateUserAdm = async (id, user_adm) => {
-  const parsedAdm =
-    user_adm === true || user_adm === 1 ? true :
-    user_adm === false || user_adm === 0 ? false : null
+const parsedAdm =
+  user_adm === true || user_adm === 1 || user_adm === "1" ? true :
+  user_adm === false || user_adm === 0 || user_adm === "0" ? false :
+  null
 
   if (parsedAdm === null) {
     logger.warn(`⚠️ [ADMIN SERVICE] user_adm inválido recebido: ${user_adm}`)
