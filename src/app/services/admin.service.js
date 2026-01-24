@@ -39,7 +39,11 @@ export const updateUserStatus = async (id, status) => {
 }
 
 export const updateUserAdm = async (id, user_adm) => {
-  if (![true, false].includes(user_adm)) {
+  const parsedAdm =
+    user_adm === true || user_adm === 1 ? true :
+    user_adm === false || user_adm === 0 ? false : null
+
+  if (parsedAdm === null) {
     logger.warn(`⚠️ [ADMIN SERVICE] user_adm inválido recebido: ${user_adm}`)
     const error = new Error('Valor de user_adm inválido')
     error.statusCode = 400
@@ -55,7 +59,7 @@ export const updateUserAdm = async (id, user_adm) => {
     throw error
   }
 
-  user.user_adm = user_adm
+  user.user_adm = parsedAdm
   await user.save()
 
   logger.info(`✅ [ADMIN SERVICE] user_adm atualizado: userId=${id} -> ${user.user_adm}`)
@@ -68,3 +72,4 @@ export const updateUserAdm = async (id, user_adm) => {
     user_adm: user.user_adm
   }
 }
+
