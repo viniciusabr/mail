@@ -35,21 +35,26 @@ export const updateUserStatus = async (req, res, next) => {
 
 export const updateUserAdm = async (req, res, next) => {
   try {
-    const { id } = req.params
-    const { user_adm } = req.body
+    const { id } = req.params;
 
-    logger.info(`📥 [ADMIN CONTROLLER] PATCH /users/${id}/adm iniciado | user_adm=${user_adm}`)
+    console.log("👉 [DEBUG] BODY RECEBIDO:", req.body);
+    console.log("👉 [DEBUG] user_adm:", req.body?.user_adm, "TIPO:", typeof req.body?.user_adm);
 
-    const user = await updateUserAdmService(id, user_adm)
+    const { user_adm } = req.body;
 
-    logger.info(`✅ [ADMIN CONTROLLER] PATCH /users/${id}/adm concluído | user_admAtual=${user.user_adm}`)
+    logger.info(`📥 [ADMIN CONTROLLER] PATCH /users/${id}/adm iniciado | user_adm=${user_adm}`);
+
+    const user = await updateUserAdmService(id, user_adm);
+
+    logger.info(`✅ [ADMIN CONTROLLER] PATCH /users/${id}/adm concluído | user_admAtual=${user.user_adm}`);
 
     return res.status(200).json({
       message: 'Tipo de usuário atualizado com sucesso',
       user
-    })
+    });
   } catch (err) {
-    logger.error(`❌ [ADMIN CONTROLLER] PATCH /users/${req.params?.id}/adm falhou | ${err.message}`)
-    return next(err)
+    logger.error(`❌ [ADMIN CONTROLLER] PATCH /users/${req.params?.id}/adm falhou | ${err.message}`);
+    return next(err);
   }
-}
+};
+
